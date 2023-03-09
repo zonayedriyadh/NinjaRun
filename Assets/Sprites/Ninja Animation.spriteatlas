@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ninja Animation
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 2
+      m_CompressionQuality: 100
+      m_CrunchedCompression: 1
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 8cd42ff66b7c6f14397452ea07bf6332, type: 3}
+    - {fileID: 2800000, guid: 509d673834e99a444bfb55203c80a7d1, type: 3}
+    - {fileID: 2800000, guid: f6f020f3a91835d4ca1b329dea7d3c15, type: 3}
+    - {fileID: 2800000, guid: a25f511ccae944249813ab3d701c1de8, type: 3}
+    - {fileID: 2800000, guid: 86b90cea1eff6224591cd3508b61d724, type: 3}
+    - {fileID: 2800000, guid: 1ec5616865a213c479aac34c02efead6, type: 3}
+    - {fileID: 2800000, guid: acbd29f9ca4ea4e4898fbace87a96eaf, type: 3}
+    - {fileID: 2800000, guid: e824db0fb6894ef499f66ca1b00382b0, type: 3}
+    - {fileID: 2800000, guid: 5581b56cebc318546b4313076e719f54, type: 3}
+    - {fileID: 2800000, guid: 7cb7b89898d889644a71f7b681cc5702, type: 3}
+    - {fileID: 2800000, guid: 973e6c7d0b95eaf4cac94479d9ffe280, type: 3}
+    - {fileID: 2800000, guid: 7fa1ca4aecf1cec4fa2dba235ac92078, type: 3}
+    - {fileID: 2800000, guid: 0143b7114034d9543b482dae407dac7d, type: 3}
+    - {fileID: 2800000, guid: b5a44fc7cafd49c4b89726ac1ffab625, type: 3}
+    - {fileID: 2800000, guid: bc3e224c02f18a64a8363f7b3a6e5afc, type: 3}
+    - {fileID: 2800000, guid: 5627585df40cd4245b669d5df1f2c143, type: 3}
+    - {fileID: 2800000, guid: 12a73910c3f30eb4997d786f08ce4268, type: 3}
+    - {fileID: 2800000, guid: da30698503ffba849851a875d80b4ce4, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 12a73910c3f30eb4997d786f08ce4268, type: 3}
+  - {fileID: 21300000, guid: 0143b7114034d9543b482dae407dac7d, type: 3}
+  - {fileID: 21300000, guid: f6f020f3a91835d4ca1b329dea7d3c15, type: 3}
+  - {fileID: 21300000, guid: da30698503ffba849851a875d80b4ce4, type: 3}
+  - {fileID: 21300000, guid: 8cd42ff66b7c6f14397452ea07bf6332, type: 3}
+  - {fileID: 21300000, guid: b5a44fc7cafd49c4b89726ac1ffab625, type: 3}
+  - {fileID: 21300000, guid: 509d673834e99a444bfb55203c80a7d1, type: 3}
+  - {fileID: 21300000, guid: 1ec5616865a213c479aac34c02efead6, type: 3}
+  - {fileID: 21300000, guid: 7cb7b89898d889644a71f7b681cc5702, type: 3}
+  - {fileID: 21300000, guid: acbd29f9ca4ea4e4898fbace87a96eaf, type: 3}
+  - {fileID: 21300000, guid: 7fa1ca4aecf1cec4fa2dba235ac92078, type: 3}
+  - {fileID: 21300000, guid: 86b90cea1eff6224591cd3508b61d724, type: 3}
+  - {fileID: 21300000, guid: a25f511ccae944249813ab3d701c1de8, type: 3}
+  - {fileID: 21300000, guid: bc3e224c02f18a64a8363f7b3a6e5afc, type: 3}
+  - {fileID: 21300000, guid: 5581b56cebc318546b4313076e719f54, type: 3}
+  - {fileID: 21300000, guid: 5627585df40cd4245b669d5df1f2c143, type: 3}
+  - {fileID: 21300000, guid: 973e6c7d0b95eaf4cac94479d9ffe280, type: 3}
+  - {fileID: 21300000, guid: e824db0fb6894ef499f66ca1b00382b0, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - SNinja_nosword_run 10
+  - SNinja_nosword_run 06
+  - SNinja_nosword_crouch 1
+  - SNinja_nosword_run 11
+  - SNinja_nosword_crouch 2
+  - SNinja_nosword_run 07
+  - SNinja_nosword_crouch 3
+  - SNinja_nosword_jump 1
+  - SNinja_nosword_run 03
+  - SNinja_nosword_jump 2
+  - SNinja_nosword_run 05
+  - SNinja_nosword_crouchdash 2
+  - SNinja_nosword_crouchdash 1
+  - SNinja_nosword_run 08
+  - SNinja_nosword_run 02
+  - SNinja_nosword_run 09
+  - SNinja_nosword_run 04
+  - SNinja_nosword_run 01
+  m_RenderDataMap: {}
+  m_Tag: Ninja Animation
+  m_IsVariant: 0

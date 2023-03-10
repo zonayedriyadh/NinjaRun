@@ -20,7 +20,7 @@ namespace NinjaRun
         public float timeOfTouch;
     }
 
-    public class PlayerController : MonoBehaviour, IPointerDownHandler
+    public class PlayerController : MonoBehaviour
     {
         private float gameTime = 0;
         public PlayerState currentState;
@@ -31,7 +31,7 @@ namespace NinjaRun
         private Vector2 startPos;
         public float currentVelocity = 0;
         private float deltaT = 0;
-        private InformationTouch lastTouchInfo;
+        //private InformationTouch lastTouchInfo;
 
         public float gravity = -9.8f;
         public float jumpForce ;
@@ -40,23 +40,13 @@ namespace NinjaRun
         // Start is called before the first frame update
         void Start()
         {
-            Initialize();
+            //Initialize();
         }
 
         // Update is called once per frame
         void Update()
         {
             gameTime += Time.deltaTime;
-            if (Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0)
-            {
-                //Debug.Log("finger id -> "+ Input.GetTouch(Input.touchCount - 1).fingerId);
-                if (Input.GetTouch(Input.touchCount - 1).phase == TouchPhase.Began)
-                {
-                    lastTouchInfo.touch = Input.GetTouch(Input.touchCount - 1);
-                    lastTouchInfo.timeOfTouch = gameTime;
-                    PlayerInstruction(PlayerState.Jumping);
-                }
-            }
 
             if (CurrentState != PlayerState.Running )
             {
@@ -99,10 +89,12 @@ namespace NinjaRun
             sinmpleAnimation = transform.GetComponent<SimpleSpriteAnimator>();
             sinmpleAnimation.PlayAnimation("Run");
             deltaT = 0;
-            startPos = transform.position;
-            lastTouchInfo.timeOfTouch = 0;
+            if (startPos.x != 0 && startPos.y != 0)
+                transform.position = startPos;
+            else
+                startPos = transform.position;
+            //lastTouchInfo.timeOfTouch = 0;
         }
-
         public void PlayerInstruction(PlayerState doState)
         {
             switch (doState)
@@ -134,13 +126,24 @@ namespace NinjaRun
             {
                 CurrentState = PlayerState.Jumping;
             }
+            
         }
-    
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.CompareTag("Fireball"))
+            {
+                Debug.Log("Fire hitted");
+                Destroy(collision.gameObject);
+            }
+        }
         public void OnCollisionEnter2D(Collision2D collision)
         {
+            
             if (collision.collider.CompareTag("Ground"))
             {
-                if(CurrentState != PlayerState.Running)
+                Debug.Log("ground hitted");
+                if (CurrentState != PlayerState.Running)
                 {
                     deltaT = 0;
                     currentVelocity = 0;
@@ -150,11 +153,8 @@ namespace NinjaRun
                 }
                 
             }
+            
         }
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -29,7 +29,7 @@ public class ItemConfig
     public GameObject itemObjectPrefab;
 }
 
-    [Serializable]
+[Serializable]
 public class ParallaxItem
 {
     public ParallaxItemType itemType;

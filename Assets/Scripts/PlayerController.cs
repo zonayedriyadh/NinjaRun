@@ -2,6 +2,7 @@ using Modules;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace NinjaRun
 {
@@ -19,21 +20,23 @@ namespace NinjaRun
         public float timeOfTouch;
     }
 
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IPointerDownHandler
     {
+        private float gameTime = 0;
         public PlayerState currentState;
         public PlayerState CurrentState { get { return currentState; } set { currentState = value; } }
 
         private Rigidbody2D rigidBody;
         private SimpleSpriteAnimator sinmpleAnimation;
         private Vector2 startPos;
-        private float currentVelocity = 0;
+        public float currentVelocity = 0;
         private float deltaT = 0;
         private InformationTouch lastTouchInfo;
 
         public float gravity = -9.8f;
         public float jumpForce ;
-        
+
+        public bool isVEclocityzero = false;
         // Start is called before the first frame update
         void Start()
         {
@@ -43,31 +46,37 @@ namespace NinjaRun
         // Update is called once per frame
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0)
+            gameTime += Time.deltaTime;
+            if (Input.GetKeyDown(KeyCode.Space) || Input.touchCount > 0)
             {
-                if(lastTouchInfo.touch.deltaTime != Input.GetTouch(Input.touchCount - 1).deltaTime)
+                //Debug.Log("finger id -> "+ Input.GetTouch(Input.touchCount - 1).fingerId);
+                if (Input.GetTouch(Input.touchCount - 1).phase == TouchPhase.Began)
                 {
                     lastTouchInfo.touch = Input.GetTouch(Input.touchCount - 1);
-                    if (CurrentState == PlayerState.Running)
-                    {
-                        sinmpleAnimation.PlayAnimation("Jump");
-                        CurrentState = PlayerState.Jumping;
-                        currentVelocity = jumpForce;
-                        //rigidBody.AddForce(new Vector2(0, jumpForce),ForceMode2D.Impulse);
-                    }
+                    lastTouchInfo.timeOfTouch = gameTime;
+                    PlayerInstruction(PlayerState.Jumping);
                 }
-
- 
             }
 
-            if(CurrentState == PlayerState.Jumping)
+            if (CurrentState != PlayerState.Running )
             {
                 deltaT += Time.deltaTime;
                 applyVelocity();
             }
 
+            if(CurrentState == PlayerState.DoubleJumping && currentVelocity < 0 && !isVEclocityzero)
+            {
+                isVEclocityzero = true;
+                //Debug.Log(transform.position);
+            }
+
         }
 
+        private void StartJump()
+        {
+            currentVelocity = jumpForce;
+            deltaT = 0;
+        }
         public void applyVelocity()
         {
             //if (CurrentState == PlayerState.Jumping)
@@ -75,6 +84,11 @@ namespace NinjaRun
                 float nextVelocity = currentVelocity + gravity * deltaT;
                 currentVelocity = nextVelocity;
                 transform.position = new Vector3(transform.position.x, transform.position.y + currentVelocity *Time.deltaTime);
+                if(transform.position.y < startPos.y)
+                {
+                    transform.position = startPos;
+                }
+                
             }
         }
 
@@ -89,11 +103,35 @@ namespace NinjaRun
             lastTouchInfo.timeOfTouch = 0;
         }
 
+        public void PlayerInstruction(PlayerState doState)
+        {
+            switch (doState)
+            {
+                case PlayerState.Jumping:
+                    if (CurrentState == PlayerState.Running)
+                    {
+                        isVEclocityzero = false;
+                        sinmpleAnimation.PlayAnimation("Jump");
+                        CurrentState = PlayerState.Jumping;
+                        StartJump();
+                        //rigidBody.AddForce(new Vector2(0, jumpForce),ForceMode2D.Impulse);
+                    }
+                    else if (CurrentState == PlayerState.Jumping)
+                    {
+                        isVEclocityzero = false;
+                        sinmpleAnimation.PlayAnimation("Jump");
+                        CurrentState = PlayerState.DoubleJumping;
+                        StartJump();
+                    }
+                    break;
+            }
+
+            
+        }
         public void OnCollisionExit2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Ground"))
             {
-                //Debug.Log("Ground exit");
                 CurrentState = PlayerState.Jumping;
             }
         }
@@ -102,7 +140,7 @@ namespace NinjaRun
         {
             if (collision.collider.CompareTag("Ground"))
             {
-                if(CurrentState == PlayerState.Jumping)
+                if(CurrentState != PlayerState.Running)
                 {
                     deltaT = 0;
                     currentVelocity = 0;
@@ -112,6 +150,11 @@ namespace NinjaRun
                 }
                 
             }
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

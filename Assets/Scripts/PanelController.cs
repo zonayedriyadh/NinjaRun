@@ -9,6 +9,7 @@ namespace Modules
     {
         None,
         Home,
+        GamePlay,
         Setting,
         Store,
         Pause,

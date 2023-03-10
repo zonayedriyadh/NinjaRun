@@ -7,6 +7,12 @@ using System.Linq;
 using Random = UnityEngine.Random;
 using Modules;
 
+public enum ParallaxState
+{
+    Pause,
+    Running
+}
+
 public enum ParallaxItemType
 {
     layer0,
@@ -88,16 +94,33 @@ public class ParallaxBackgrounds : MonoBehaviour
     public List<ParallaxItem> parallaxItem;
     public GameObject ParallaxArea;
     public float speed;
+    private ParallaxState currentState;
     // Start is called before the first frame update
     void Start()
     {
+        Initialize();
+    }
+
+    public void Initialize()
+    {
         parallaxItem.OrderByDescending(x => x.order);
         SetParallaxItem();
+        currentState = ParallaxState.Running;
+    }
+    public void ReInitialize()
+    {
+        currentState = ParallaxState.Running;
+    }
+
+    public void SetPause()
+    {
+        currentState = ParallaxState.Pause;
     }
     // Update is called once per frame
     void Update()
     {
-        MoveParallaxObjects(Time.deltaTime);
+        if(currentState == ParallaxState.Running)
+            MoveParallaxObjects(Time.deltaTime);
     }
 
     private void SetParallaxItem()

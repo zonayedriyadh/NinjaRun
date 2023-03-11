@@ -30,11 +30,11 @@ public class FireBall : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnTriggetEnter(Collider collision)
     {
-        if(collision.collider.tag == "Player")
+        if(collision.tag == "Player")
         {
             Destroy(gameObject);
         }
-    }
+    }*/
 }

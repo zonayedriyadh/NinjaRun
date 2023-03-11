@@ -36,7 +36,8 @@ namespace NinjaRun
         public float gravity = -9.8f;
         public float jumpForce ;
 
-        public bool isVEclocityzero = false;
+        private bool isFloatingStarted = false;
+        public bool IsFloatingStarted { get { return isFloatingStarted; } set { isFloatingStarted = value; } }
         // Start is called before the first frame update
         void Start()
         {
@@ -48,23 +49,37 @@ namespace NinjaRun
         {
             gameTime += Time.deltaTime;
 
-            if (CurrentState != PlayerState.Running )
+            if (CurrentState == PlayerState.Jumping || CurrentState == PlayerState.DoubleJumping)
             {
                 deltaT += Time.deltaTime;
                 applyVelocity();
             }
-
-            if(CurrentState == PlayerState.DoubleJumping && currentVelocity < 0 && !isVEclocityzero)
+            else if (CurrentState == PlayerState.Floating)
             {
-                isVEclocityzero = true;
+                applyVelocity();
+            }
+
+            if(CurrentState == PlayerState.DoubleJumping && currentVelocity < 0 && isFloatingStarted)
+            {
+                CurrentState = PlayerState.Floating;
+                isFloatingStarted = false;
+                sinmpleAnimation.PlayAnimation("Jump");
+                StartJumporFloat(true);
                 //Debug.Log(transform.position);
             }
 
         }
 
-        private void StartJump()
+        private void StartJumporFloat(bool isFloating = false)
         {
-            currentVelocity = jumpForce;
+            if(!isFloating)
+            {
+                currentVelocity = jumpForce;
+            }
+            else
+            {
+                currentVelocity = - jumpForce / 50;
+            }
             deltaT = 0;
         }
         public void applyVelocity()
@@ -78,7 +93,6 @@ namespace NinjaRun
                 {
                     transform.position = startPos;
                 }
-                
             }
         }
 
@@ -102,18 +116,27 @@ namespace NinjaRun
                 case PlayerState.Jumping:
                     if (CurrentState == PlayerState.Running)
                     {
-                        isVEclocityzero = false;
+                        isFloatingStarted = false;
                         sinmpleAnimation.PlayAnimation("Jump");
                         CurrentState = PlayerState.Jumping;
-                        StartJump();
+                        StartJumporFloat();
                         //rigidBody.AddForce(new Vector2(0, jumpForce),ForceMode2D.Impulse);
                     }
                     else if (CurrentState == PlayerState.Jumping)
                     {
-                        isVEclocityzero = false;
+                        isFloatingStarted = true;
                         sinmpleAnimation.PlayAnimation("Jump");
                         CurrentState = PlayerState.DoubleJumping;
-                        StartJump();
+                        StartJumporFloat();
+                    }
+                    break;
+                case PlayerState.DoubleJumping:
+                    if (CurrentState == PlayerState.Floating)
+                    {
+                        isFloatingStarted = false;
+                        sinmpleAnimation.PlayAnimation("Jump");
+                        CurrentState = PlayerState.DoubleJumping;
+                        //StartJumporFloat();
                     }
                     break;
             }
@@ -126,35 +149,27 @@ namespace NinjaRun
             {
                 CurrentState = PlayerState.Jumping;
             }
-            
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (collision.CompareTag("Fireball"))
-            {
-                Debug.Log("Fire hitted");
-                Destroy(collision.gameObject);
-            }
-        }
         public void OnCollisionEnter2D(Collision2D collision)
         {
-            
             if (collision.collider.CompareTag("Ground"))
             {
-                Debug.Log("ground hitted");
+                //Debug.Log("ground hitted");
                 if (CurrentState != PlayerState.Running)
                 {
                     deltaT = 0;
                     currentVelocity = 0;
                     transform.position = startPos;
+                    IsFloatingStarted = true;
                     CurrentState = PlayerState.Running;
                     sinmpleAnimation.PlayAnimation("Run");
                 }
-                
             }
-            
+            else if (collision.collider.tag == "Fireball")
+            {
+                Destroy(collision.gameObject);
+            }
         }
-
     }
 }

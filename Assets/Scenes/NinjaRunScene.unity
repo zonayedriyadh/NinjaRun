@@ -422,7 +422,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 159, y: 148}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &194565410
 MonoBehaviour:
@@ -541,7 +541,6 @@ MonoBehaviour:
   currentVelocity: 0
   gravity: -75
   jumpForce: 2000
-  isVEclocityzero: 0
 --- !u!61 &194565415
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -555,7 +554,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 62, y: 62}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -566,7 +565,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 125, y: 125}
   m_EdgeRadius: 0
 --- !u!1 &519420028
 GameObject:
@@ -1253,14 +1252,14 @@ GameObject:
   - component: {fileID: 1713968123}
   - component: {fileID: 1713968122}
   - component: {fileID: 1713968126}
-  - component: {fileID: 1713968125}
+  - component: {fileID: 1713968127}
   m_Layer: 5
   m_Name: FireBall
   m_TagString: Fireball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1713968121
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1270,7 +1269,7 @@ RectTransform:
   m_GameObject: {fileID: 1713968120}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1879460046}
@@ -1279,7 +1278,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 113, y: 209}
-  m_SizeDelta: {x: 109, y: 48}
+  m_SizeDelta: {x: 52, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1713968122
 MonoBehaviour:
@@ -1293,7 +1292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fed1ae941eafb348acb604e5b78a4bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteAtlas: {fileID: 4343727234628468602, guid: 25212bdfaedd91346bd724e1783ca857, type: 2}
+  spriteAtlas: {fileID: 4343727234628468602, guid: 90aa30f357e44dd4fbb753f1d1373ab5, type: 2}
   animations:
   - name: Fire
     speed: 1
@@ -1341,7 +1340,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713968120}
   m_CullTransparentMesh: 1
---- !u!61 &1713968125
+--- !u!114 &1713968126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713968120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aabe3ee82609f6e43bd220666f8abc2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 1500
+--- !u!61 &1713968127
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1351,7 +1363,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1365,21 +1377,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 114, y: 48}
+  m_Size: {x: 52, y: 22}
   m_EdgeRadius: 0
---- !u!114 &1713968126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713968120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aabe3ee82609f6e43bd220666f8abc2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2000
 --- !u!1 &1754353638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1606,6 +1605,17 @@ MonoBehaviour:
   player: {fileID: 194565414}
   fireballArea: {fileID: 1522405548}
   fireballPrefab: {fileID: 1713968120}
+  listOfDistanceOfCreateFireBalls:
+  - 350
+  - 1500
+  - 800
+  - 1500
+  - 1500
+  - 800
+  - 800
+  - 1500
+  - 1500
+  - 1500
 --- !u!225 &1879460050
 CanvasGroup:
   m_ObjectHideFlags: 0

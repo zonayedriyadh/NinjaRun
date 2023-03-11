@@ -78,7 +78,7 @@ namespace NinjaRun
             }
             else
             {
-                currentVelocity = - jumpForce / 50;
+                currentVelocity = - jumpForce / 25;
             }
             deltaT = 0;
         }

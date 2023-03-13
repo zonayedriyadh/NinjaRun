@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Modules;
 using UnityEngine.UI;
+using System;
 
 public class FireBall : MonoBehaviour
 {
+    public bool isActive = true;
     private Vector2 size;
     private float scale;
     private SimpleSpriteAnimator simpleAnimation;
     [SerializeField] private float speed;
+    public Action<int> addPoint;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +32,20 @@ public class FireBall : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("ScoreDetector"))
+        {
+            addPoint?.Invoke(1);
+            isActive = false;
+        }
+    }
+    /*public void DestroyFireBall()
+    {
+        addPoint?.Invoke(isActive?1:0);
+        Destroy(gameObject);
+    }*/
 
     /*private void OnTriggetEnter(Collider collision)
     {

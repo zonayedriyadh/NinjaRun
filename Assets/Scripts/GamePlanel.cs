@@ -5,6 +5,7 @@ using Modules;
 using UnityEngine.UI;
 using NinjaRun;
 using UnityEngine.EventSystems;
+using TMPro;
 
 namespace NinjaRun
 {
@@ -34,6 +35,8 @@ namespace NinjaRun
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private List<float> listOfDistanceOfCreateFireBalls;
         private float currentDistanceFireBall;
+        private int gamePoint = 0;
+        [SerializeField] TextMeshProUGUI textScore;
         private PointerEventData lastPointerData = null;
         private GameObject lastFireball = null;
 
@@ -53,12 +56,19 @@ namespace NinjaRun
         }
         private void Update()
         {
-            if (lastFireball != null && currentState == GameState.Running)
+            if (currentState == GameState.Running)
             {
-                float distance = Screen.width - lastFireball.transform.position.x;
-                if(distance > currentDistanceFireBall * PanelController.Instance.GetScaleFactor())
+                if (lastFireball != null && currentState == GameState.Running)
                 {
-                    //Debug.Log(" game state -> "+currentState.ToString());
+                    float distance = Screen.width - lastFireball.transform.position.x;
+                    if (distance > currentDistanceFireBall * PanelController.Instance.GetScaleFactor())
+                    {
+                        //Debug.Log(" game state -> "+currentState.ToString());
+                        CreateFireBall();
+                    }
+                }
+                else if (lastFireball == null)
+                {
                     CreateFireBall();
                 }
             }
@@ -66,13 +76,38 @@ namespace NinjaRun
         private void Initialize()
         {
             int rand = Random.Range(0, listOfParallaxBackGround.Count);
+            gamePoint = 0;
             currentBackground = listOfParallaxBackGround[rand];
             currentBackground.gameObject.SetActive(true);
             currentBackground.ReInitialize();
-            player.Initialize();
+            player.Initialize(PlayerDeath);
             currentState = GameState.TransitionPeriod;
             CreateFireBall();
             StartCoroutine("ChangeOfDistance");
+            updateScore();
+        }
+        private void PlayerDeath()
+        {
+            currentState = GameState.GameOver;
+            GameOverCall();
+        }
+
+        private void GameOverCall()
+        {
+            currentBackground.SetPause();
+            currentState = GameState.GameOver;
+        }
+        private void AddScore(int score)
+        {
+            if (currentState == GameState.Running)
+            {
+                gamePoint += score;
+                updateScore();
+            }
+        }
+        private void updateScore()
+        {
+            textScore.text = gamePoint.ToString();
         }
 
         public override void OnDisable()
@@ -101,11 +136,12 @@ namespace NinjaRun
         }
         public void CreateFireBall()
         {
-            List<float> listOfPos = new List<float> { 180,250,350,500,650};
+            List<float> listOfPos = new List<float> { 230,275,350,500,650};
             int rand = Random.Range(0, listOfPos.Count);
             float posY = listOfPos[rand];
             lastFireball = Instantiate(fireballPrefab, fireballArea.transform);
             lastFireball.SetActive(true);
+            lastFireball.GetComponent<FireBall>().addPoint = AddScore;
             Vector2 size = lastFireball.GetComponent<RectTransform>().sizeDelta;
             lastFireball.transform.position = new Vector2(Screen.width+size.x *PanelController.Instance.GetScaleFactor(),posY* PanelController.Instance.GetScaleFactor());
         }

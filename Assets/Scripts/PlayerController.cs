@@ -1,4 +1,5 @@
 using Modules;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,8 @@ namespace NinjaRun
         Running,
         Jumping,
         DoubleJumping,
-        Floating
+        Floating,
+        dead
     }
 
     public struct InformationTouch
@@ -22,7 +24,7 @@ namespace NinjaRun
 
     public class PlayerController : MonoBehaviour
     {
-        private float gameTime = 0;
+
         public PlayerState currentState;
         public PlayerState CurrentState { get { return currentState; } set { currentState = value; } }
 
@@ -38,6 +40,8 @@ namespace NinjaRun
 
         private bool isFloatingStarted = false;
         public bool IsFloatingStarted { get { return isFloatingStarted; } set { isFloatingStarted = value; } }
+
+        public Action deathMethod;
         // Start is called before the first frame update
         void Start()
         {
@@ -47,8 +51,6 @@ namespace NinjaRun
         // Update is called once per frame
         void Update()
         {
-            gameTime += Time.deltaTime;
-
             if (CurrentState == PlayerState.Jumping || CurrentState == PlayerState.DoubleJumping)
             {
                 deltaT += Time.deltaTime;
@@ -63,7 +65,7 @@ namespace NinjaRun
             {
                 CurrentState = PlayerState.Floating;
                 isFloatingStarted = false;
-                sinmpleAnimation.PlayAnimation("Jump");
+                sinmpleAnimation.PlayAnimation("Float");
                 StartJumporFloat(true);
                 //Debug.Log(transform.position);
             }
@@ -74,17 +76,17 @@ namespace NinjaRun
         {
             if(!isFloating)
             {
-                currentVelocity = jumpForce;
+                currentVelocity = jumpForce *PanelController.Instance.GetScaleFactor();
             }
             else
             {
-                currentVelocity = - jumpForce / 25;
+                currentVelocity = - jumpForce * PanelController.Instance.GetScaleFactor() / 25;
             }
             deltaT = 0;
         }
         public void applyVelocity()
         {
-            //if (CurrentState == PlayerState.Jumping)
+            if (CurrentState != PlayerState.dead)
             {
                 float nextVelocity = currentVelocity + gravity * deltaT;
                 currentVelocity = nextVelocity;
@@ -96,8 +98,9 @@ namespace NinjaRun
             }
         }
 
-        public void Initialize()
+        public void Initialize(Action _deathMethod)
         {
+            deathMethod = _deathMethod;
             CurrentState = PlayerState.Running;
             rigidBody = transform.GetComponent<Rigidbody2D>();
             sinmpleAnimation = transform.GetComponent<SimpleSpriteAnimator>();
@@ -145,6 +148,8 @@ namespace NinjaRun
         }
         public void OnCollisionExit2D(Collision2D collision)
         {
+            if (CurrentState == PlayerState.dead)
+                return;
             if (collision.collider.CompareTag("Ground"))
             {
                 CurrentState = PlayerState.Jumping;
@@ -153,10 +158,12 @@ namespace NinjaRun
 
         public void OnCollisionEnter2D(Collision2D collision)
         {
+            if (CurrentState == PlayerState.dead)
+                return;
             if (collision.collider.CompareTag("Ground"))
             {
                 //Debug.Log("ground hitted");
-                if (CurrentState != PlayerState.Running)
+                if (CurrentState != PlayerState.Running )
                 {
                     deltaT = 0;
                     currentVelocity = 0;
@@ -168,8 +175,30 @@ namespace NinjaRun
             }
             else if (collision.collider.tag == "Fireball")
             {
+                /*FireBall fireBall = collision.gameObject.GetComponent<FireBall>();
+                if (fireBall != null && fireBall.isActive)
+                {
+                    fireBall.isActive = false;
+                    fireBall.DestroyFireBall();
+                }*/
+                PlayerDeathCall();
+                
                 Destroy(collision.gameObject);
             }
         }
+        private void PlayerDeathCall()
+        {
+            deathMethod?.Invoke();
+            CurrentState = PlayerState.dead;
+            sinmpleAnimation.PlayAnimation("Dead");
+            applyDeathForce();
+        }
+
+        private void applyDeathForce()
+        {
+            Vector2 force = new Vector2(-1000, -1000); ;
+            rigidBody.AddForce(force,ForceMode2D.Impulse);
+        }
+
     }
 }

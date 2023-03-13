@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Fireball
+  - ScoreDetector
   layers:
   - Default
   - TransparentFX

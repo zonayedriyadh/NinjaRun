@@ -613,7 +613,7 @@ MonoBehaviour:
     - SNinja float 5
   - name: Dead
     speed: 1
-    loop: 0
+    loop: 1
     frames:
     - SNinja dead 1
 --- !u!114 &194565411

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 namespace NinjaRun
 {
@@ -196,8 +197,10 @@ namespace NinjaRun
 
         private void applyDeathForce()
         {
-            Vector2 force = new Vector2(-1000, -1000); ;
-            rigidBody.AddForce(force,ForceMode2D.Impulse);
+            /*Vector2 force = new Vector2(-1000, -1000); ;
+            rigidBody.AddForce(force,ForceMode2D.Impulse);*/
+            Vector2 lastPos = new Vector2(startPos.x-300*PanelController.Instance.GetScaleFactor(),startPos.y);
+            transform.DOJump(lastPos,300,1,0.5f,false);
         }
 
     }

@@ -31,7 +31,8 @@ namespace NinjaRun
         [SerializeField]private List<ParallaxBackgrounds> listOfParallaxBackGround;
         private ParallaxBackgrounds currentBackground;
         [SerializeField] private PlayerController player;
-        [SerializeField] private GameObject fireballArea;
+        [SerializeField] private GameObject fireballAreaPrefab;
+        private GameObject fireballArea;
         [SerializeField] private GameObject fireballPrefab;
         [SerializeField] private List<float> listOfDistanceOfCreateFireBalls;
         private float currentDistanceFireBall;
@@ -81,10 +82,21 @@ namespace NinjaRun
             currentBackground.gameObject.SetActive(true);
             currentBackground.ReInitialize();
             player.Initialize(PlayerDeath);
+            CreateFireballArea();
             currentState = GameState.TransitionPeriod;
             CreateFireBall();
             StartCoroutine("ChangeOfDistance");
             updateScore();
+        }
+        
+        private void CreateFireballArea()
+        {
+            if(fireballArea != null)
+            {
+                Destroy(fireballArea);
+            }
+
+            fireballArea = Instantiate(fireballAreaPrefab,transform);
         }
         private void PlayerDeath()
         {
@@ -96,6 +108,10 @@ namespace NinjaRun
         {
             currentBackground.SetPause();
             currentState = GameState.GameOver;
+
+            GameOverProperties properties = new GameOverProperties();
+            properties.score = gamePoint;
+            ClosePanelWithTransitionAndProperties(PanelId.GameOver, properties);
         }
         private void AddScore(int score)
         {

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using NinjaRun;
 using UnityEngine.EventSystems;
 using TMPro;
+using DG.Tweening;
 
 namespace NinjaRun
 {
@@ -26,7 +27,7 @@ namespace NinjaRun
 
     public class GamePlanel : BasePanel, IPointerDownHandler, IPointerUpHandler
     {
-        private GameState currentState;
+        [SerializeField] private GameState currentState;
         [SerializeField]private Button ButtonBack;
         [SerializeField]private List<ParallaxBackgrounds> listOfParallaxBackGround;
         private ParallaxBackgrounds currentBackground;
@@ -40,6 +41,7 @@ namespace NinjaRun
         [SerializeField] TextMeshProUGUI textScore;
         private PointerEventData lastPointerData = null;
         private GameObject lastFireball = null;
+        [SerializeField] TextMeshProUGUI textGameOver;
 
         public override void OnEnable()
         {
@@ -73,7 +75,21 @@ namespace NinjaRun
                     CreateFireBall();
                 }
             }
+
+            if(Input.GetKey(KeyCode.S))
+            {
+                ShowGameOverText();
+            }
+
+            /*if(Input.touchCount>0)
+            {
+                if(Input.touches[0].phase == TouchPhase.Began)
+                {
+                    Debug.Log("Touch Began");
+                }
+            }*/
         }
+
         private void Initialize()
         {
             int rand = Random.Range(0, listOfParallaxBackGround.Count);
@@ -87,8 +103,23 @@ namespace NinjaRun
             CreateFireBall();
             StartCoroutine("ChangeOfDistance");
             updateScore();
+            textGameOver.gameObject.SetActive(false);
         }
         
+        private void ShowGameOverText()
+        {
+            textGameOver.gameObject.SetActive(true);
+            textGameOver.transform.localScale = Vector2.zero;
+            /*textGameOver.transform.DOScale(1,1.0f).OnComplete(()=> 
+            {
+                textGameOver.transform.DOJump(textGameOver.transform.position, 50, 1, 0.1f).SetEase(Ease.Linear);
+            });*/
+
+            textGameOver.transform.DOJump(new Vector2(Screen.width/2,Screen.height/2), 100 * PanelController.Instance.GetScaleFactor(), 1, 0.3f).OnStart(() =>
+            {
+                textGameOver.transform.DOScale(1, 0.3f);
+            });
+        }
         private void CreateFireballArea()
         {
             if(fireballArea != null)
@@ -100,18 +131,29 @@ namespace NinjaRun
         }
         private void PlayerDeath()
         {
-            currentState = GameState.GameOver;
-            GameOverCall();
-        }
-
-        private void GameOverCall()
-        {
             currentBackground.SetPause();
             currentState = GameState.GameOver;
+            ShowGameOverText();
+            StartCoroutine("GameOverCall");
+        }
+
+        private IEnumerator GameOverCall()
+        {
+            yield return new WaitForSeconds(3f);
 
             GameOverProperties properties = new GameOverProperties();
             properties.score = gamePoint;
-            ClosePanelWithTransitionAndProperties(PanelId.GameOver, properties);
+            properties.OnClickReplay = Replay;
+            properties.OnClickHome = OnClickHome;
+            OpenPanelWithoutClosing(PanelId.GameOver, properties);
+        }
+        private void OnClickHome()
+        {
+            ClosePanelWithTransition(PanelId.Home);
+        }
+        private void Replay()
+        {
+            ClosePanelWithTransition(PanelId.GamePlay);
         }
         private void AddScore(int score)
         {
@@ -142,11 +184,13 @@ namespace NinjaRun
         }
         public void OnCLick_BackButton()
         {
-            ClosePanelWithTransition(PanelId.Home);
+            if(currentState != GameState.GameOver)
+                ClosePanelWithTransition(PanelId.Home);
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
+            //Debug.Log("On pOinter down");
             lastPointerData = eventData;
             player.PlayerInstruction(PlayerState.Jumping);
         }

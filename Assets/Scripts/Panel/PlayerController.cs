@@ -38,7 +38,7 @@ namespace NinjaRun
 
         public float gravity = -9.8f;
         public float jumpForce ;
-
+        public float floatingDragForce;
         private bool isFloatingStarted = false;
         public bool IsFloatingStarted { get { return isFloatingStarted; } set { isFloatingStarted = value; } }
 
@@ -81,7 +81,7 @@ namespace NinjaRun
             }
             else
             {
-                currentVelocity = - jumpForce * PanelController.Instance.GetScaleFactor() / 25;
+                currentVelocity = -floatingDragForce * PanelController.Instance.GetScaleFactor() ;
             }
             deltaT = 0;
         }
@@ -99,7 +99,7 @@ namespace NinjaRun
             }
         }
 
-        public void Initialize(Action _deathMethod)
+        public void Initialize(Action _deathMethod = null)
         {
             deathMethod = _deathMethod;
             CurrentState = PlayerState.Running;

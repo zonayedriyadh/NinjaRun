@@ -4,13 +4,17 @@ using UnityEngine;
 using Modules;
 using TMPro;
 using UnityEngine.UI;
+using System;
+
 namespace NinjaRun
 {
     public class GameOverProperties : PanelProperties
     {
         public int score;
+        public Action OnClickReplay;
+        public Action OnClickHome;
     }
-    public class GameOverPanel : BasePanel
+    public class GameOverPanel : PopUp
     {
         private enum ButtonId
         {
@@ -67,10 +71,11 @@ namespace NinjaRun
             switch (buttonId)
             {
                 case ButtonId.Home:
-                    ClosePanelWithTransition(PanelId.Home);
+                    ClosePanelWithTransition(PanelId.Home, property.OnClickHome);
+                    //property.OnClickHome?.Invoke();
                     break;
                 case ButtonId.Replay:
-                    ClosePanelWithTransition(PanelId.GamePlay);
+                    ClosePanelWithTransition(PanelId.GamePlay, property.OnClickReplay);
                     break;
                 case ButtonId.Leaderboard:
                     //ClosePanelWithTransition(PanelId.GamePlay);

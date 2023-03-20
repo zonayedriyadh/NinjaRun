@@ -29,9 +29,16 @@ namespace NinjaRun
             Initialize();
         }
 
+        public override void OnCompleteTransition()
+        {
+            base.OnCompleteTransition();
+            player.Initialize();
+        }
         public override void OnDisable()
         {
             base.OnDisable();
+            currentBackground.gameObject.SetActive(false);
+            currentBackground.SetPause();
             StartBlickTapHere(false);
         }
 
@@ -53,7 +60,7 @@ namespace NinjaRun
             currentBackground = listOfParallaxBackGround[rand];
             currentBackground.gameObject.SetActive(true);
             currentBackground.ReInitialize();
-            player.Initialize();
+            
             StartBlickTapHere(true);
         }
 

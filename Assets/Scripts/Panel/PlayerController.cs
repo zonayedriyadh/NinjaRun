@@ -70,7 +70,10 @@ namespace NinjaRun
                 StartJumporFloat(true);
                 //Debug.Log(transform.position);
             }
-
+            if(Input.GetKey(KeyCode.A))
+            {
+                Debug.Log("position -> "+transform.position);
+            }
         }
 
         private void StartJumporFloat(bool isFloating = false)
@@ -108,9 +111,14 @@ namespace NinjaRun
             sinmpleAnimation.PlayAnimation("Run");
             deltaT = 0;
             if (startPos.x != 0 && startPos.y != 0)
+            {
                 transform.position = startPos;
+                Debug.Log("Transform postion -> "+transform.position);
+            }
             else
                 startPos = transform.position;
+
+            
             //lastTouchInfo.timeOfTouch = 0;
         }
         public void PlayerInstruction(PlayerState doState)

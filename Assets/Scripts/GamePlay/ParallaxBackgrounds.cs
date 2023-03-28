@@ -112,9 +112,12 @@ public class ParallaxBackgrounds : MonoBehaviour
         currentState = ParallaxState.Running;
     }
 
-    public void SetPause()
+    public void SetPause(bool isPaused)
     {
-        currentState = ParallaxState.Pause;
+        if(isPaused)
+            currentState = ParallaxState.Pause;
+        else
+            currentState = ParallaxState.Running;
     }
     // Update is called once per frame
     void Update()

@@ -10,6 +10,7 @@ namespace NinjaRun
 {
     public enum PlayerState
     {
+        Pause,
         Running,
         Jumping,
         DoubleJumping,
@@ -25,7 +26,7 @@ namespace NinjaRun
 
     public class PlayerController : MonoBehaviour
     {
-
+        private PlayerState stateBeforePause;
         public PlayerState currentState;
         public PlayerState CurrentState { get { return currentState; } set { currentState = value; } }
 
@@ -113,7 +114,6 @@ namespace NinjaRun
             if (startPos.x != 0 && startPos.y != 0)
             {
                 transform.position = startPos;
-                Debug.Log("Transform postion -> "+transform.position);
             }
             else
                 startPos = transform.position;
@@ -209,6 +209,19 @@ namespace NinjaRun
             rigidBody.AddForce(force,ForceMode2D.Impulse);*/
             Vector2 lastPos = new Vector2(startPos.x-300*PanelController.Instance.GetScaleFactor(),startPos.y);
             transform.DOJump(lastPos,300,1,0.5f,false);
+        }
+
+        public void SetPause()
+        {
+            stateBeforePause = currentState;
+            currentState = PlayerState.Pause;
+            sinmpleAnimation.PausAnimation();
+        }
+
+        public void SetResume()
+        {
+            currentState = stateBeforePause;
+            sinmpleAnimation.ResumeAnimation();
         }
 
     }

@@ -38,7 +38,7 @@ namespace NinjaRun
         {
             base.OnDisable();
             currentBackground.gameObject.SetActive(false);
-            currentBackground.SetPause();
+            currentBackground.SetPause(true);
             StartBlickTapHere(false);
         }
 

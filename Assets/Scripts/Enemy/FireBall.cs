@@ -5,17 +5,26 @@ using Modules;
 using UnityEngine.UI;
 using System;
 
+public enum FireballState
+{
+    Active,
+    InActive,
+    Pause
+}
 public class FireBall : MonoBehaviour
 {
-    public bool isActive = true;
+    public Action<int> OnDestroyFireball;
     private Vector2 size;
     private float scale;
     private SimpleSpriteAnimator simpleAnimation;
     [SerializeField] private float speed;
     public Action<int> addPoint;
+    public FireballState currentState;
+    public int ballNo;
     // Start is called before the first frame update
     void Start()
     {
+        currentState = FireballState.Active;
         size = GetComponent<RectTransform>().sizeDelta;
         scale = PanelController.Instance.GetScaleFactor();
         simpleAnimation = GetComponent<SimpleSpriteAnimator>();
@@ -26,10 +35,14 @@ public class FireBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector2(transform.position.x - speed *scale* Time.deltaTime, transform.position.y);
-        if(transform.position.x < -(size.x *scale))
+        if(currentState == FireballState.Active || currentState == FireballState.InActive)
         {
-            Destroy(gameObject);
+            transform.position = new Vector2(transform.position.x - speed * scale * Time.deltaTime, transform.position.y);
+            if (transform.position.x < -(size.x * scale))
+            {
+                
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -38,20 +51,26 @@ public class FireBall : MonoBehaviour
         if(collision.CompareTag("ScoreDetector"))
         {
             addPoint?.Invoke(1);
-            isActive = false;
+            currentState = FireballState.InActive;
         }
     }
-    /*public void DestroyFireBall()
-    {
-        addPoint?.Invoke(isActive?1:0);
-        Destroy(gameObject);
-    }*/
 
-    /*private void OnTriggetEnter(Collider collision)
+    void OnDestroy()
     {
-        if(collision.tag == "Player")
+        OnDestroyFireball?.Invoke(ballNo);
+    }
+
+    public void SetPause(bool pause)
+    {
+        if (pause)
         {
-            Destroy(gameObject);
+            currentState = FireballState.Pause;
+            simpleAnimation.PausAnimation();
         }
-    }*/
+        else
+        {
+            simpleAnimation.ResumeAnimation();
+            currentState = FireballState.Active;
+        }
+    }
 }

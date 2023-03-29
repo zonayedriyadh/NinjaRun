@@ -17,6 +17,7 @@ namespace NinjaRun
         TransitionPeriod,
         Running,
         Pause,
+        CountDown,
         GameOver
     }
 
@@ -164,10 +165,12 @@ namespace NinjaRun
         }
         private void OnClickHome()
         {
+            AudioManager.Instance.PlayOneShot("TapButton");
             ClosePanelWithTransition(PanelId.Home);
         }
         private void Replay()
         {
+            AudioManager.Instance.PlayOneShot("TapButton");
             ClosePanelWithTransition(PanelId.GamePlay);
         }
         private void AddScore(int score)
@@ -199,8 +202,12 @@ namespace NinjaRun
         }
         public void OnCLick_BackButton()
         {
-            if(currentState != GameState.GameOver)
+            
+            if (currentState != GameState.GameOver)
+            {
+                AudioManager.Instance.PlayOneShot("TapButton");
                 ClosePanelWithTransition(PanelId.Home);
+            }
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -211,6 +218,7 @@ namespace NinjaRun
         }
         public void CreateFireBall()
         {
+            AudioManager.Instance.PlayOneShot("FireBallCreated",0.1f);
             wholeBallNo++;
             List<float> listOfPos = new List<float> { 230,275,350,500,650};
             int rand = Random.Range(0, listOfPos.Count);
@@ -237,6 +245,7 @@ namespace NinjaRun
         {
             if (currentState != GameState.GameOver)
             {
+                AudioManager.Instance.PlayOneShot("TapButton");
                 StopCoroutine("CountDownTime");
                 //OnPause?.Invoke(false);
                 ShowText("Paused");
@@ -251,6 +260,7 @@ namespace NinjaRun
 
         IEnumerator CountDownTime(int i)
         {
+            currentState = GameState.CountDown;
             ShowText(i.ToString());
             yield return new WaitForSeconds(1);
             if(i<=1)
@@ -267,15 +277,16 @@ namespace NinjaRun
 
         public void OnCLick_ButtonResume()
         {
-            if (currentState != GameState.GameOver)
+            if (currentState != GameState.GameOver && currentState != GameState.CountDown)
             {
+                AudioManager.Instance.PlayOneShot("TapButton");
                 StartCoroutine("CountDownTime", 3);
             }
         }
 
         private void Resume()
         {
-            if (currentState != GameState.GameOver)
+            if (currentState != GameState.GameOver )
             {
                 textGameOver.gameObject.SetActive(false);
                 ButtonResume.gameObject.SetActive(false);

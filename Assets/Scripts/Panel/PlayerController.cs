@@ -132,6 +132,7 @@ namespace NinjaRun
                         sinmpleAnimation.PlayAnimation("Jump");
                         CurrentState = PlayerState.Jumping;
                         StartJumporFloat();
+                        AudioManager.Instance.PlayOneShot("Jump");
                         //rigidBody.AddForce(new Vector2(0, jumpForce),ForceMode2D.Impulse);
                     }
                     else if (CurrentState == PlayerState.Jumping)
@@ -140,6 +141,7 @@ namespace NinjaRun
                         sinmpleAnimation.PlayAnimation("Jump");
                         CurrentState = PlayerState.DoubleJumping;
                         StartJumporFloat();
+                        AudioManager.Instance.PlayOneShot("Jump");
                     }
                     break;
                 case PlayerState.DoubleJumping:
@@ -148,7 +150,7 @@ namespace NinjaRun
                         isFloatingStarted = false;
                         sinmpleAnimation.PlayAnimation("Jump");
                         CurrentState = PlayerState.DoubleJumping;
-                        //StartJumporFloat();
+                        //StartJumporFloat()
                     }
                     break;
             }
@@ -197,6 +199,7 @@ namespace NinjaRun
         }
         private void PlayerDeathCall()
         {
+            AudioManager.Instance.PlayOneShot("Death");
             deathMethod?.Invoke();
             CurrentState = PlayerState.dead;
             sinmpleAnimation.PlayAnimation("Dead");

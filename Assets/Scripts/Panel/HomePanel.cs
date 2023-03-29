@@ -50,6 +50,7 @@ namespace NinjaRun
 
         public void OnCLick_EnterInGame()
         {
+            AudioManager.Instance.PlayOneShot("TapButton");
             StartBlickTapHere(false);
             ClosePanelWithTransition(PanelId.GamePlay);
         }

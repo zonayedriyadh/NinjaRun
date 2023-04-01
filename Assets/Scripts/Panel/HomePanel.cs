@@ -17,10 +17,18 @@ namespace NinjaRun
         [SerializeField] private PlayerController player;
 
         [SerializeField] private GameObject TapHereText;
+        [SerializeField] private Button SoundButtonOnOff;
+        [SerializeField] private Button ButtonRateUs;
+        [SerializeField] private Button ButtonMoveList;
+        [SerializeField] private Image SoundButtonOn;
+        [SerializeField] private Image SoundButtonOff;
         // Start is called before the first frame update
         void Start()
         {
             ButtonEnterInGame.onClick.AddListener(OnCLick_EnterInGame);
+            SoundButtonOnOff.onClick.AddListener(SoundOnOff);
+            ButtonRateUs.onClick.AddListener(OnClickRateUs);
+            ButtonMoveList.onClick.AddListener(OnClickMoveListButton);
         }
 
         public override void OnEnable()
@@ -63,6 +71,9 @@ namespace NinjaRun
             currentBackground.ReInitialize();
             
             StartBlickTapHere(true);
+            //SoundOnOff(PlayerPrefs.GetInt("SoundOnOff",1)==1?true:false);
+            SoundButtonOn.gameObject.SetActive((PlayerPrefs.GetInt("SoundOnOff", 1) == 1 ? true : false));
+            SoundButtonOff.gameObject.SetActive(!(PlayerPrefs.GetInt("SoundOnOff", 1) == 1 ? true : false));
         }
 
         private void StartBlickTapHere(bool isAnimationOn)
@@ -80,6 +91,25 @@ namespace NinjaRun
                 TapHereText.GetComponent<CanvasGroup>().DOKill();
             }
             
+        }
+
+        private void SoundOnOff()
+        {
+            bool isSoundOnOff = (PlayerPrefs.GetInt("SoundOnOff",1)==1 ? true : false);
+            PlayerPrefs.SetInt("SoundOnOff", !isSoundOnOff ? 1 : 0);            
+            AudioManager.Instance.SetSFXOnOff(!isSoundOnOff);
+
+            SoundButtonOn.gameObject.SetActive(!isSoundOnOff);
+            SoundButtonOff.gameObject.SetActive(isSoundOnOff);
+        }
+
+        private void OnClickRateUs()
+        {
+            
+        }
+        private void OnClickMoveListButton()
+        {
+            OpenPanelWithoutClosing(PanelId.MoveList);
         }
 
     }

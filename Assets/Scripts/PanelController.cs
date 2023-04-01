@@ -11,6 +11,7 @@ namespace Modules
         Home,
         GamePlay,
         Setting,
+        MoveList,
         Store,
         Pause,
         GameOver,

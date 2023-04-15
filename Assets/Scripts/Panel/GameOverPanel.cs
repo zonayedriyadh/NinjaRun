@@ -51,6 +51,7 @@ namespace NinjaRun
         {
             
             property = (GameOverProperties)_properties;
+            CloudOnceServices.Instance.SubmitToLeaderBoard(property.score,CloudOnceServices.HighScore);
             SetScoreText();
         }
 
@@ -78,7 +79,7 @@ namespace NinjaRun
                     ClosePanelWithTransition(PanelId.GamePlay, property.OnClickReplay);
                     break;
                 case ButtonId.Leaderboard:
-                    //ClosePanelWithTransition(PanelId.GamePlay);
+                    CloudOnceServices.Instance.ShowLeaderBoard(CloudOnceServices.HighScore);
                     break;
             }
         }

@@ -105,7 +105,7 @@ namespace NinjaRun
 
         private void OnClickRateUs()
         {
-            
+            Application.OpenURL("https://play.google.com/store/apps/details?id=com.casualgamestudiox.runninjarun");
         }
         private void OnClickMoveListButton()
         {
